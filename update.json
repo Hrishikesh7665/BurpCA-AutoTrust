@@ -1,6 +1,7 @@
 {
     "version": "v1.0",
     "versionCode": 1,
-    "zipUrl": "https://github.com/Hrishikesh7665/BurpCA-AutoTrust/releases/download/v1.1/burpca_autotrust-v1.0.zip",
+    "zipUrl": "https://github.com/Hrishikesh7665/BurpCA-AutoTrust/releases/download/v1.0/burpca_autotrust-v1.0.zip",
     "changelog": "https://raw.githubusercontent.com/Hrishikesh7665/BurpCA-AutoTrust/refs/heads/main/CHANGELOG.md"
+
 }
