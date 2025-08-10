@@ -1,0 +1,85 @@
+#!/sbin/sh
+chmod 755 "$0"
+umask 022
+
+ui_print() {
+    echo "$1"
+}
+
+require_new_magisk() {
+    ui_print "*******************************"
+    ui_print " Please install Magisk v20.4+! "
+    ui_print "*******************************"
+    exit 1
+}
+
+OUTFD=$2
+ZIPFILE=$3
+
+mount /data 2>/dev/null
+
+MODULE_PROP="module.prop"
+
+get_prop() {
+    local key=$1
+    unzip -p "$ZIPFILE" "$MODULE_PROP" | grep "^$key=" | cut -d'=' -f2-
+}
+
+ID=$(get_prop id)
+NAME=$(get_prop name)
+VERSION=$(get_prop version)
+AUTHOR=$(get_prop author)
+DESCRIPTION=$(get_prop description)
+DESCRIPTION_LONG=$(get_prop description_long)
+CERT_EXPIRY=$(get_prop certificate_expiry)
+
+ui_print "==================================="
+ui_print " Installing module: $NAME"
+ui_print " Version: $VERSION"
+ui_print " Author: $AUTHOR"
+ui_print " ID: $ID"
+ui_print " Description:"
+ui_print " $DESCRIPTION"
+ui_print ""
+ui_print " More info:"
+ui_print " $DESCRIPTION_LONG"
+ui_print ""
+ui_print " Certificate expiry date: $CERT_EXPIRY"
+ui_print "==================================="
+
+if [ ! -f /data/adb/magisk/util_functions.sh ]; then
+    ui_print "[ERROR] Magisk util_functions.sh not found!"
+    require_new_magisk
+fi
+
+. /data/adb/magisk/util_functions.sh
+
+if [ "$MAGISK_VER_CODE" -lt 20400 ]; then
+    ui_print "[ERROR] Magisk version too old: $MAGISK_VER_CODE"
+    require_new_magisk
+fi
+
+ANDROID_VER=$(getprop ro.build.version.release | cut -d'.' -f1)
+if [ -z "$ANDROID_VER" ]; then ANDROID_VER=0; fi
+
+if [ "$ANDROID_VER" -lt 7 ]; then
+    ui_print "[ERROR] Android version $ANDROID_VER is unsupported. Minimum supported version is 7."
+    exit 1
+fi
+
+ui_print "Detected Android version: $ANDROID_VER"
+ui_print "Starting module installation..."
+
+install_module
+
+if [ $? -eq 0 ]; then
+    ui_print "Installation completed successfully!"
+else
+    ui_print "[ERROR] Installation failed!"
+fi
+
+ui_print "==================================="
+ui_print "       $NAME Module Installation Complete       "
+ui_print "==================================="
+
+exit 0

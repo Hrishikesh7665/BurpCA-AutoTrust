@@ -1,0 +1,9 @@
+id=burpca_autotrust
+name=BurpCA AutoTrust
+version=1.0
+versionCode=1
+author=Hrishikesh7665
+description=Automatically installs and trusts Burp Suite CA certificate.
+description_long=Automatically installs and trusts Burp Suite CA certificate in Android system trusted credentials. Supports Android 7 and up. Performs APEX injection on Android 14 and higher. Compatible with Magisk and KernelSU.
+certificate_expiry=24-Dec-2027
+updateJson=https://raw.githubusercontent.com/Hrishikesh7665/BurpCA-AutoTrust/refs/heads/main/update.json
